@@ -10,10 +10,16 @@ const d = {...site,
   dateText: fmt({day:'numeric',month:'long',year:'numeric'}),
   weekday: fmt({weekday:'long'}), dayNum: fmt({day:'numeric'}),
   monthShort: fmt({month:'short'}).toUpperCase()};
-d.marquee = `${d.fullLine} ✿ ${d.dateText} ✿ ${site.place} ✿ Together with our families ✿ `;
+d.marquee = `${d.fullLine} ✿ ${d.dateText} ✿ Lekshmi Auditorium, ${site.place} ✿ `;
 document.querySelectorAll('[data-t]').forEach(e => { const v = d[e.dataset.t] ?? ''; e.textContent = v; e.hidden = !v; });
 document.querySelectorAll('[data-show]').forEach(e => e.hidden = site.show[e.dataset.show] === false);
-$('maps').href = site.mapsUrl; $('tel').href = 'tel:' + site.phone;
+let mapLink = site.mapsUrl || '';
+if (mapLink && !/^https?:\/\//i.test(mapLink)) {
+    mapLink = 'https://' + mapLink;
+}
+$('maps').href = mapLink; 
+
+$('tel').href = 'tel:' + site.phone;
 document.title = `${d.couple} | ${site.eventTitle}`;
 
 /* ---------- Opening screen + music ---------- */

@@ -104,18 +104,34 @@ function initHero(){
 }
 initHero();
 /* ---------- Add to calendar (.ics) ---------- */
+/* ---------- Add to calendar ---------- */
 $('cal').addEventListener('click', e => {
   e.preventDefault();
-  const z = x => x.toISOString().replace(/[-:]|\.\d{3}/g,'');
+  const z = x => x.toISOString().replace(/[-:]|\.\d{3}/g, '');
+  const end = new Date(+EVENT + 4*3600e3);
+  const title = `${site.eventTitle} – ${d.couple}`;
+  const details = `${d.fullLine}. ${site.timeText}.`;
+  const isApple = /iPhone|iPad|Macintosh/.test(navigator.userAgent);
+
+  if (!isApple) {   // Android, Windows, etc.: open Google Calendar with the event filled in
+    const url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+      + '&text=' + encodeURIComponent(title)
+      + '&dates=' + z(EVENT) + '/' + z(end)
+      + '&details=' + encodeURIComponent(details)
+      + '&location=' + encodeURIComponent(site.venue);
+    window.open(url, '_blank', 'noopener');
+    return;
+  }
+  // iPhone / Mac: .ics file opens straight into Apple Calendar
   const ics = ['BEGIN:VCALENDAR','VERSION:2.0','BEGIN:VEVENT',
-    'DTSTART:'+z(EVENT),'DTEND:'+z(new Date(+EVENT+4*3600e3)),
-    `SUMMARY:${site.eventTitle} – ${d.couple}`,
+    'DTSTART:'+z(EVENT),'DTEND:'+z(end),
+    `SUMMARY:${title}`,
     'LOCATION:'+site.venue.replace(/,/g,'\\,'),
-    `DESCRIPTION:${d.fullLine}. ${site.timeText}.`,
+    `DESCRIPTION:${details}`,
     'END:VEVENT','END:VCALENDAR'].join('\r\n');
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([ics], {type:'text/calendar'}));
-  a.download = 'wedding-reception.ics'; a.click();
+  a.download = 'wedding.ics'; a.click();
 });
 
 // Bride & Gromm Reception

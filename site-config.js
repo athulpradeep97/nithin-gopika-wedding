@@ -1,6 +1,10 @@
 // ===== EDIT THIS FILE to change the website's content =====
 // Anything left as "" (empty) is hidden automatically.
 export const site = {
+    // Hero slideshow: photos fade automatically. Missing files are skipped.
+  slideSeconds: 5,
+  heroBackgrounds: ["images/hero.jpg", "images/story.jpg", "images/reception.jpg", "images/closing.jpg"],
+  archPhotos:      ["images/arch.jpg", "images/family.jpg", "images/closing.jpg", "images/reception.jpg"],
   groomFirst: "Nithin",   brideFirst: "Gopika",
   groomFull:  "Nithin",   brideFull:  "Gopika",       // e.g. "Dr. Nithin K"
   initials:   "N  G",                                  // shown top-left
@@ -10,7 +14,7 @@ export const site = {
   timeText: "11:45 am - 12.05 pm",                        // EDIT ME
 
   eventTitle: "Wedding",
-  eventTitleMl: "വിവാഹം",                       // "" to hide
+  // eventTitleMl: "വിവാഹം",                       // "" to hide
   venue: "Lekshmi Kalyana Mandapam, Kaimanam",
   mapsUrl: "https://www.google.com/maps/place/Lekshmi+Kalyana+Mandapam/@8.4711148,76.972881,17z/data=!3m1!4b1!4m6!3m5!1s0x3b05bae5665f344d:0x2095b02a4d09311a!8m2!3d8.4711148!4d76.9754559!16s%2Fg%2F1vfn522j?hl=en_GB&entry=ttu&g_ep=EgoyMDI2MTAyMC4wIKXMDSoASAFQAw%3D%3D",                  // EDIT ME: Google Maps share link
   place: "Trivandrum",                    // shown on hero and footer

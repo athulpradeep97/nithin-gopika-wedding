@@ -10,7 +10,7 @@ const d = {...site,
   dateText: fmt({day:'numeric',month:'long',year:'numeric'}),
   weekday: fmt({weekday:'long'}), dayNum: fmt({day:'numeric'}),
   monthShort: fmt({month:'short'}).toUpperCase()};
-d.marquee = `${d.fullLine} ✿ ${d.dateText} ✿ Lekshmi Auditorium, ${site.place} ✿ `;
+d.marquee = `${d.fullLine}   ✿   ${d.dateText}   ✿   Lekshmi Auditorium, ${site.place}   ✿   `;
 document.querySelectorAll('[data-t]').forEach(e => { const v = d[e.dataset.t] ?? ''; e.textContent = v; e.hidden = !v; });
 document.querySelectorAll('[data-show]').forEach(e => e.hidden = site.show[e.dataset.show] === false);
 let mapLink = site.mapsUrl || '';
@@ -21,6 +21,7 @@ $('maps').href = mapLink;
 
 $('tel').href = 'tel:' + site.phone;
 document.title = `${d.couple} | ${site.eventTitle}`;
+
 
 /* ---------- Opening screen + music ---------- */
 const audio = $('audio'), musicBtn = $('music');
@@ -38,8 +39,10 @@ musicBtn.addEventListener('click', () => setMusic(audio.paused));
 function startPetals(){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const box = $('petals');
+  const colors = ['#f4a6b8','#e8798f','#ffffff','#fff5f7','#f3d98f','#e8c25f'];  // rose, white, gold
   setInterval(() => {
     const p = document.createElement('i'); p.className = 'petal';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
     p.style.left = Math.random()*100 + 'vw';
     p.style.setProperty('--dx', (Math.random()*160-80) + 'px');
     p.style.animationDuration = 8 + Math.random()*8 + 's';
@@ -55,7 +58,51 @@ function tick(){
   ['d','h','m','s'].forEach((k,i) => $(k).textContent = String(v[i]).padStart(2,'0'));
 }
 tick(); setInterval(tick, 1000);
+/* ---------- Hero: rotating photos, overlay, spinning petals ---------- */
+function initHero(){
+  const hero = document.querySelector('.hero'); if (!hero) return;
+  const arch = hero.querySelector('.arch');
+  const mk = (tag, cls) => { const e = document.createElement(tag); e.className = cls; return e; };
+  const loadable = list => Promise.all((list || []).map(src => new Promise(res => {
+    const i = new Image(); i.onload = () => res(src); i.onerror = () => res(null); i.src = src;
+  }))).then(a => a.filter(Boolean));
 
+  // Rearrange existing content: text on one side, arch on the other
+  const bg = mk('div', 'hero-bg'), overlay = mk('div', 'hero-overlay');
+  const inner = mk('div', 'hero-inner'), text = mk('div', 'hero-text'), art = mk('div', 'hero-art');
+  bg.setAttribute('aria-hidden', 'true'); overlay.setAttribute('aria-hidden', 'true');
+  [...hero.children].forEach(el => { if (el !== arch) text.append(el); });
+
+  const mandala = mk('div', 'mandala'); mandala.setAttribute('aria-hidden', 'true');
+  const petals = (n, cy, rx, ry) => Array.from({length: n}, (_, i) =>
+    `<ellipse cx="200" cy="${cy}" rx="${rx}" ry="${ry}" transform="rotate(${i * 360 / n} 200 200)"/>`).join('');
+  mandala.innerHTML = `<svg viewBox="0 0 400 400"><g class="p1">${petals(16, 70, 20, 58)}</g><g class="p2">${petals(12, 122, 16, 34)}</g></svg>`;
+  art.append(mandala); if (arch) art.append(arch);
+  inner.append(text, art);
+  hero.replaceChildren(bg, overlay, inner);
+
+  // Crossfade helper
+  const ms = (site.slideSeconds || 5) * 1000;
+  const cycle = (srcs, make, every) => {
+    if (!srcs.length) return;
+    const els = srcs.map(make); let i = 0; els[0].classList.add('on');
+    if (els.length > 1) setInterval(() => {
+      els[i].classList.remove('on'); i = (i + 1) % els.length; els[i].classList.add('on');
+    }, every);
+  };
+
+  loadable(site.heroBackgrounds).then(srcs => cycle(srcs, src => {
+    const l = mk('div', 'layer'); l.style.backgroundImage = `url("${src}")`; bg.append(l); return l;
+  }, ms * 1.5));
+
+  if (arch) loadable(site.archPhotos).then(srcs => {
+    const stack = mk('div', 'arch-stack'); arch.replaceChildren(stack);
+    cycle(srcs, src => {
+      const im = document.createElement('img'); im.src = src; im.alt = d.couple; stack.append(im); return im;
+    }, ms);
+  });
+}
+initHero();
 /* ---------- Add to calendar (.ics) ---------- */
 $('cal').addEventListener('click', e => {
   e.preventDefault();

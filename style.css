@@ -335,7 +335,7 @@ section h2 {
 .hero,
 .foot {
     position: relative;
-    background: linear-gradient(#fffd, #fffd), var(--bg) center/cover;
+    background: linear-gradient(#4c2d1c, #2e1a10), var(--bg) center/cover;
     min-height: 100svh;
     padding-top: 6rem
 }
@@ -401,6 +401,7 @@ section h2 {
     font: italic 300 1.5rem Fraunces;
     color: var(--wine)
 }
+
 
 .marquee div {
     display: flex;
@@ -765,3 +766,194 @@ dd {
         scroll-behavior: auto
     }
 }
+
+/* ===== Hero: rotating photos, wine overlay, spinning petals ===== */
+:root{--hero-deep:#2a0a14;--hero-cream:#fbf1dc;--hero-gold:#e3c27a;--hero-name:#f27dd5}
+.nav{background:rgba(42,10,20,.94);color:var(--hero-cream);border-bottom:1px solid var(--gold2)}
+.nav nav a,.nav .mono{color:var(--hero-cream)}
+
+.hero{display:grid;place-items:center;isolation:isolate;overflow:hidden;background:var(--hero-deep);padding:6rem 1.25rem 3rem}
+.hero-bg,.hero-overlay{position:absolute;inset:0}
+.hero-bg{z-index:-3}
+.hero-bg .layer{position:absolute;inset:0;background:center/cover;opacity:0;transform:scale(1.08);filter:grayscale(.5);transition:opacity 1.8s ease,transform 9s linear}
+.hero-bg .layer.on{opacity:.5;transform:scale(1)}
+.hero-overlay{z-index:-2;background:
+  radial-gradient(circle,rgba(227,194,122,.22) 1.2px,transparent 1.7px) 0 0/22px 22px,
+  linear-gradient(rgba(227,194,122,.07) 1px,transparent 1px) 0 0/44px 44px,
+  linear-gradient(90deg,rgba(227,194,122,.07) 1px,transparent 1px) 0 0/44px 44px,
+  linear-gradient(180deg,rgba(42,10,20,.82),rgba(92,20,52,.78) 55%,rgba(42,10,20,.92))}
+
+.hero-inner{width:min(1100px,100%);display:grid;gap:2.5rem;align-items:center;justify-items:center}
+.hero-text{max-width:560px}
+.hero-text p{color:var(--hero-cream)}
+.hero .gold-t,.hero .place{color:var(--hero-gold)}
+.hero .big{color:var(--hero-name);text-shadow:0 4px 28px rgba(0,0,0,.5)}
+.hero .weds{color:#e58fb0}.hero .weds span{background:var(--hero-gold)}
+.hero .btn{margin:1.4rem 0 0;background:linear-gradient(#e6c887,#b98d3f);border-color:var(--gold2);color:#2a1408}
+
+.hero-art{position:relative;display:grid;place-items:center;width:100%}
+.mandala{position:absolute;width:min(560px,130%);aspect-ratio:1;z-index:0;pointer-events:none}
+.mandala svg{width:100%;height:100%;overflow:visible}
+.mandala g{transform-box:fill-box;transform-origin:center}
+.mandala .p1{fill:rgba(227,194,122,.30);animation:spin 80s linear infinite}
+.mandala .p2{fill:rgba(242,125,213,.22);animation:spin 55s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.hero .arch{position:relative;z-index:1;margin:0;background:var(--hero-deep);box-shadow:0 28px 60px rgba(0,0,0,.55)}
+.arch-stack{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:999px 999px 0 0}
+.arch-stack img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;opacity:0;transition:opacity 1.3s ease}
+.arch-stack img.on{opacity:1}
+
+@media(min-width:900px){
+  .hero-inner{grid-template-columns:1.1fr .9fr;justify-items:stretch}
+  .hero-text{text-align:left}
+  .hero .weds{justify-content:flex-start}
+  .hero-art{justify-self:center}
+}
+/* ===== Golden names, gold marquee, burgundy countdown, sunset cards ===== */
+
+/* Hero names and footer names: same gold */
+.hero .big,.foot .big{
+  background:linear-gradient(180deg,#f8e3a0,#dcb35a 55%,#a97b2d);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:none;filter:drop-shadow(0 3px 14px rgba(0,0,0,.35))}
+.foot .big{filter:none}
+
+/* Moving bar: gold fill */
+.marquee{background:linear-gradient(180deg,#f6e1a2,#dcb35a 50%,#c9a45c);
+  color:#3a1a08;border-block:2px solid var(--gold2)}
+
+/* Yellowish fade: now at the top (under the moving bar), removed from family */
+.story{background:linear-gradient(180deg,#fdf0c8,#fff 45%)}
+.story[hidden]{display:none}
+.family{background:linear-gradient(180deg,#fff 45%,#fdf0c8)}
+
+/* Story: photo on the left, text on the right (desktop) */
+@media(min-width:900px){
+  .story{display:grid;grid-template-columns:minmax(0,440px) minmax(0,520px);
+    grid-template-rows:auto 1fr;column-gap:4rem;justify-content:center;
+    align-items:start;text-align:left}
+  .story .frame{grid-row:1/3;margin:0}
+  .story blockquote{align-self:end}
+  .story .thread{margin:0;max-width:none;align-self:center}
+}
+
+/* Countdown: burgundy */
+.count{background:
+  radial-gradient(circle,rgba(227,194,122,.18) 1.2px,transparent 1.7px) 0 0/22px 22px,
+  linear-gradient(180deg,#5a1226,#34081a)}
+.count .script{color:#e3c27a}
+.count h2{color:#fbf1dc}
+.clock div{border-color:#e3c27a;background:rgba(255,255,255,.05);box-shadow:0 0 22px rgba(227,194,122,.35)}
+.clock b{color:#fbf1dc}
+.clock small{color:#e3c27a}
+
+/* Event cards: mild creamy sunset */
+.ecard{background:linear-gradient(160deg,#fffaf0 0%,#fdecd0 55%,#f8d6b8 100%)}
+
+/* Wish cards: light multicolour */
+.note-card:nth-child(6n+1){background:#ffe6ee;border-top-color:#f1a3bb}
+.note-card:nth-child(6n+2){background:#e4f6ec;border-top-color:#8fd0aa}
+.note-card:nth-child(6n+3){background:#ece6fb;border-top-color:#b3a2e6}
+.note-card:nth-child(6n+4){background:#fff0dd;border-top-color:#f0bd7c}
+.note-card:nth-child(6n+5){background:#e2f1fb;border-top-color:#8cc3e6}
+.note-card:nth-child(6n+6){background:#fffbd9;border-top-color:#e6d46e}
+
+/* Petals get a soft shadow so white ones show on white sections */
+.petal{box-shadow:0 0 4px rgba(0,0,0,.18)}
+
+/* ===== Burgundy patterned wedding footer ===== */
+
+.foot {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(132, 48, 75, 0.45),
+      transparent 65%
+    ),
+    linear-gradient(
+      145deg,
+      #4b0f20 0%,
+      #641b35 48%,
+      #2a0a14 100%
+    );
+
+  color: #fbf1dc;
+}
+
+/* Gold dots and fine geometric grid */
+.foot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(227, 194, 122, 0.36) 1px,
+      transparent 1.8px
+    ) 0 0 / 24px 24px,
+
+    linear-gradient(
+      90deg,
+      rgba(227, 194, 122, 0.08) 1px,
+      transparent 1px
+    ) 0 0 / 48px 48px,
+
+    linear-gradient(
+      rgba(227, 194, 122, 0.08) 1px,
+      transparent 1px
+    ) 0 0 / 48px 48px;
+}
+
+/* Soft decorative gold borders */
+.foot::after {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  z-index: -1;
+  pointer-events: none;
+
+  border: 1px solid rgba(227, 194, 122, 0.28);
+  outline: 1px solid rgba(227, 194, 122, 0.10);
+  outline-offset: 5px;
+}
+
+/* Gold names and readable footer details */
+.foot .big {
+  background: linear-gradient(
+    180deg,
+    #fff0c7,
+    #e3c27a 55%,
+    #c9a45c
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  filter: drop-shadow(0 3px 12px rgba(0, 0, 0, 0.3));
+}
+
+.foot p {
+  position: relative;
+  color: #f4dfcf;
+}
+
+.foot .big2 {
+  color: #edb4c4;
+}
+
+/* Responsive border spacing */
+@media (max-width: 520px) {
+  .foot::after {
+    inset: 12px;
+  }
+}
+.marquee span{white-space:pre}
